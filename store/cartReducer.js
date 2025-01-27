@@ -5,29 +5,29 @@ const CART_INCREASE_QUANTITY = "cart/IncreaseQuantity";
 const CART_DECREASE_QUANTITY = "cart/DecreaseQuantity";
 
 //Action Creators
-export function addCartItem(item) {
+export function addCartItem(productData) {
   return {
     type: CARTADDITEM,
-    payload: item,
+    payload: productData,
   };
 }
-export function removeCartItem(item) {
+export function removeCartItem(productData) {
   return {
     type: CARTREMOVEITEM,
-    payload: item,
+    payload: productData,
   };
 }
-export function increaseQuantity(productId, quantity) {
+export function increaseQuantity(productId) {
   return {
     type: CART_INCREASE_QUANTITY,
-    payload: { productId: productId, quantity: quantity },
+    payload: { productId: productId },
   };
 }
 
-export function DecreaseQuantity(productId, quantity) {
+export function DecreaseQuantity(productId) {
   return {
     type: CART_DECREASE_QUANTITY,
-    payload: { productId: productId, quantity: quantity },
+    payload: { productId: productId },
   };
 }
 
@@ -35,7 +35,22 @@ export function DecreaseQuantity(productId, quantity) {
 export default function cartReducer(state = [], action) {
   switch (action.type) {
     case CARTADDITEM:
-      return [...state, action.payload];
+      const existingItem = state.find(
+        (cartItem) => cartItem.productId == action.payload.productId
+      );
+      console.log(existingItem);
+      if (existingItem) {
+        return state.map((cartItem) =>
+          cartItem.productId == existingItem.productId
+            ? {
+                ...cartItem,
+                quantity: cartItem.quantity + 1,
+              }
+            : cartItem
+        );
+      }
+      return [...state, { ...action.payload, quantity: 1 }];
+
     case CARTREMOVEITEM:
       return state.filter((itm) => itm.productId != action.payload.productId);
     case CART_INCREASE_QUANTITY:
@@ -43,7 +58,7 @@ export default function cartReducer(state = [], action) {
         if (cartItem.productId == action.payload.productId) {
           return {
             ...cartItem,
-            quantity: cartItem.quantity + action.payload.quantity,
+            quantity: cartItem.quantity + 1,
           };
         }
         return cartItem;
@@ -54,7 +69,7 @@ export default function cartReducer(state = [], action) {
           if (cartItem.productId == action.payload.productId) {
             return {
               ...cartItem,
-              quantity: cartItem.quantity - action.payload.quantity,
+              quantity: cartItem.quantity - 1,
             };
           }
           return cartItem;
