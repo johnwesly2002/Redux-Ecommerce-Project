@@ -1,20 +1,15 @@
 import React from "react";
 import CartItem from "../components/CaartItem";
 import { useSelector } from "react-redux";
-
+import {
+  getAllCartProducts,
+  getCartProductsLoading,
+  getCartProductsErrors,
+} from "../store/slices/cartSlice";
 export default function Cart() {
-  const cartItems = useSelector(({ products, cartItemList }) => {
-    return cartItemList.list
-      .map(({ productId, quantity }) => {
-        const productsData = products.list.find(
-          (product) => product.id === productId
-        );
-        return { ...productsData, quantity };
-      })
-      .filter(({ title }) => title);
-  });
-  const isLoading = useSelector((state) => state.cartItemList.loading);
-  const Error = useSelector((state) => state.cartItemList.error);
+  const cartItems = useSelector(getAllCartProducts);
+  const isLoading = useSelector(getCartProductsLoading);
+  const Error = useSelector(getCartProductsErrors);
 
   return (
     <div className="cart-container">

@@ -2,14 +2,14 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Product from "../components/Product";
 import {
-  fetchProducts,
-  fetchProductsError,
-  updateAllProducts,
+  getAllProducts,
+  getAllProductsLoading,
+  getAllProductsErrors,
 } from "../store/slices/productsSlice";
 export default function Home() {
-  const products = useSelector((state) => state.products.list);
-  const isLoading = useSelector((state) => state.products.loading);
-  const Error = useSelector((state) => state.products.error);
+  const products = useSelector(getAllProducts);
+  const isLoading = useSelector(getAllProductsLoading);
+  const Error = useSelector(getAllProductsErrors);
 
   return isLoading ? (
     <h1

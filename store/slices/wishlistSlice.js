@@ -53,7 +53,7 @@ const slice = createSlice({
     },
   },
 });
-
+export const getWishlistProducts = (state) => state.wishlistItem;
 export const { addWishListItem, removeWishListItem } = slice.actions;
 
 export default slice.reducer;
